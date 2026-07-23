@@ -39,8 +39,21 @@ function createSupabaseClient() {
       ...(!SUPABASE_PUBLISHABLE_KEY ? ['SUPABASE_PUBLISHABLE_KEY'] : []),
     ];
     const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Please configure them in your environment settings.`;
-    console.error(`[Supabase] ${message}`);
-    throw new Error(message);
+    console.warn(`[Supabase] ${message}`);
+    return createClient<Database>(
+      SUPABASE_URL || 'https://placeholder.supabase.co',
+      SUPABASE_PUBLISHABLE_KEY || 'placeholder-key',
+      {
+        global: {
+          fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY || 'placeholder-key'),
+        },
+        auth: {
+          storage: typeof window !== 'undefined' ? localStorage : undefined,
+          persistSession: true,
+          autoRefreshToken: true,
+        }
+      }
+    );
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {

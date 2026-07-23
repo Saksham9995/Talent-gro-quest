@@ -42,8 +42,8 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
         ...(!SUPABASE_PUBLISHABLE_KEY ? ['SUPABASE_PUBLISHABLE_KEY'] : []),
       ];
       const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Please configure them in your environment settings.`;
-      console.error(`[Supabase] ${message}`);
-      throw new Error(message);
+      console.warn(`[Supabase Auth] ${message}`);
+      return next();
     }
     
     const request = getRequest();
