@@ -7,6 +7,9 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
+  build: {
+    chunkSizeWarningLimit: 1000,
+  },
   plugins: [
     tanstackStart({
       server: { entry: "server" },
